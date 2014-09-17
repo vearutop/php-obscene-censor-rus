@@ -1,5 +1,6 @@
 php-obscene-censor-rus
 ======================
+[![Build Status](https://travis-ci.org/vearutop/php-obscene-censor-rus.png?branch=master)](https://travis-ci.org/vearutop/php-obscene-censor-rus)
 
 Класс для фильтрации нецензурных выражений (матов).
 
