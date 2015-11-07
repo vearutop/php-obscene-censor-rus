@@ -1,8 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../ObsceneCensorRus.php';
+namespace Wkhooy;
 
-class CensorTest extends PHPUnit_Framework_TestCase
+require_once __DIR__ . '/../src/ObsceneCensorRus.php';
+
+class CensorTest extends \PHPUnit_Framework_TestCase
 {
     public function testCensor()
     {

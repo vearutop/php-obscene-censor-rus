@@ -1,5 +1,7 @@
 <?php
 
+namespace Wkhooy;
+
 class ObsceneCensorRus {
     public static $log;
     public static $logEx;

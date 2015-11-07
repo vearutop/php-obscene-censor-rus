@@ -1,0 +1,24 @@
+{
+  "name": "vearutop/php-obscene-censor-rus",
+  "type": "library",
+  "description": "Класс для фильтрации нецензурных выражений (матов).",
+  "keywords": ["censor", "антимат", "цензура", "хуй", "модерация"],
+  "homepage": "https://github.com/vearutop/php-obscene-censor-rus/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Viacheslav Poturaev",
+      "email": "vearutop@gmail.com",
+      "homepage": "https://github.com/vearutop"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0"
+  },
+  "autoload": {
+    "psr-4": {"Wkhooy\\": "src/"}
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.0"
+  }
+}
