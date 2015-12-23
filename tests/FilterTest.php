@@ -17,6 +17,11 @@ class CensorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, ObsceneCensorRus::getFiltered($test));
     }
 
+    public function testWhiteWords()
+    {
+        $expected = $test = 'Launch gaunt'; // https://github.com/vearutop/php-obscene-censor-rus/issues/3
+        $this->assertSame($expected, ObsceneCensorRus::getFiltered($test));
+    }
 
     public function testText() {
         $test = 'Да пошел ты нахуй и в пиzdu huesos, ушлепок ебаный, ебать мой вялый хуй!
