@@ -6,6 +6,7 @@ require_once __DIR__ . '/../src/ObsceneCensorRus.php';
 
 class PositiveTest extends \PHPUnit_Framework_TestCase {
     public function testPositive() {
+        $this->assertSame('********', ObsceneCensorRus::getFiltered('Хуячечки'));
         $this->assertSame('******', ObsceneCensorRus::getFiltered('ПиЗдЮк'));
         $this->assertSame('*****', ObsceneCensorRus::getFiltered('сучка'));
 

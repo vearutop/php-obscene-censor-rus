@@ -36,6 +36,7 @@ class ObsceneCensorRus {
 
 
     public static $exceptions = array(
+        /*
         'команд',
         'рубл',
         'премь',
@@ -110,7 +111,11 @@ class ObsceneCensorRus {
         'ебэ',
         'перв',
         'eep',
-        'dying'
+        'dying',
+        'ablu',
+        'acaena',
+        'quino',
+        'ace',*/
     );
 
     public static function getFiltered($text, $charset = 'UTF-8') {
@@ -124,6 +129,8 @@ class ObsceneCensorRus {
         return $original === $text;
     }
 
+
+
     public static function filterText(&$text, $charset = 'UTF-8')
     {
         $utf8 = 'UTF-8';
@@ -132,83 +139,104 @@ class ObsceneCensorRus {
             $text = iconv($charset, $utf8, $text);
         }
 
-        preg_match_all('/
-\b\d*(
-	\w*[' . self::$LT_P . '][' . self::$LT_I . self::$LT_E . '][' . self::$LT_Z . '][' . self::$LT_D . ']\w* # пизда
-|
-	(?:[^' . self::$LT_I . self::$LT_U . '\s]+|' . self::$LT_N . self::$LT_I . ')?(?<!стра)[' . self::$LT_H . '][' . self::$LT_U . '][' . self::$LT_YI . self::$LT_E . self::$LT_YA . self::$LT_YO . self::$LT_I . self::$LT_L . self::$LT_YU . '](?!иг)\w* # хуй; не пускает "подстрахуй", "хулиган"
-|
-	\w*[' . self::$LT_B . '][' . self::$LT_L . '](?:
+
+        $patterns = array(
+            '\w*[' . self::$LT_P . '][' . self::$LT_I . self::$LT_E . '][' . self::$LT_Z . '][' . self::$LT_D . ']\w*', # пизда
+            '(?:[^' . self::$LT_I . self::$LT_U . '\s]+|' . self::$LT_N . self::$LT_I . ')?(?<!стра)[' . self::$LT_H . '][' . self::$LT_U . '][' . self::$LT_YI . self::$LT_E . self::$LT_YA . self::$LT_YO . self::$LT_I . self::$LT_L . self::$LT_YU . '](?!иг)\w*', // # хуй; не пускает "подстрахуй", "хулиган"
+            '\w*[' . self::$LT_B . '][' . self::$LT_L . '](?:
 		[' . self::$LT_YA . ']+[' . self::$LT_D . self::$LT_T . ']?
-		|
-		[' . self::$LT_I . ']+[' . self::$LT_D . self::$LT_T . ']+
-		|
-		[' . self::$LT_I . ']+[' . self::$LT_A . ']+
-	)(?!х)\w* # бля, блядь; не пускает "бляха"
-|
-	(?:
-		\w*[' . self::$LT_YI . self::$LT_U . self::$LT_E . self::$LT_A . self::$LT_O . self::$LT_HS . self::$LT_SS . self::$LT_Y . self::$LT_YA . '][' . self::$LT_E . self::$LT_YO . self::$LT_YA . self::$LT_I . '][' . self::$LT_B . self::$LT_P . '](?!ы\b|ол)\w* # не пускает "еёбы", "наиболее", "наибольшее"...
-		|
-		[' . self::$LT_E . self::$LT_YO . '][' . self::$LT_B . ']\w*
-		|
-		[' . self::$LT_I . '][' . /*self::$LT_P .*/ self::$LT_B . '][' . self::$LT_A . ']\w+
-		|
-		[' . self::$LT_YI . '][' . self::$LT_O . '][' . self::$LT_B . self::$LT_P . ']\w*
-	) # ебать
-|
-	\w*[' . self::$LT_S . '][' . self::$LT_C . ']?[' . self::$LT_U . ']+(?:
+		|[' . self::$LT_I . ']+[' . self::$LT_D . self::$LT_T . ']+
+		|[' . self::$LT_I . ']+[' . self::$LT_A . ']
+		+)(?!х)\w*', # бля, блядь; не пускает "бляха"
+            '(?:
+		\w*[' . self::$LT_YI . self::$LT_U . self::$LT_E . self::$LT_A . self::$LT_O . self::$LT_HS . self::$LT_SS . self::$LT_Y . self::$LT_YA . ']'
+            .'[' . self::$LT_E . self::$LT_YO . self::$LT_YA . self::$LT_I . ']'
+            .'[' . self::$LT_B . self::$LT_P . '](?!ы\b|ол)\w*' .  # не пускает "еёбы", "наиболее", "наибольшее"...
+		'|[' . self::$LT_E . self::$LT_YO . '][' . self::$LT_B . ']\w*
+		|[' . self::$LT_I . '][' . /*self::$LT_P .*/ self::$LT_B . '][' . self::$LT_A . ']\w+
+		|[' . self::$LT_YI . '][' . self::$LT_O . '][' . self::$LT_B . self::$LT_P . ']\w*
+	)', # ебать'
+
+            '\w*[' . self::$LT_S . '][' . self::$LT_C . ']?[' . self::$LT_U . ']+(?:
 		[' . self::$LT_CH . ']*[' . self::$LT_K . ']+
 		|
 		[' . self::$LT_CH . ']+[' . self::$LT_K . ']*
-	)[' . self::$LT_A . self::$LT_O . ']\w* # сука
-|
-	\w*(?:
-		[' . self::$LT_P . '][' . self::$LT_I . self::$LT_E . '][' . self::$LT_D . '][' . self::$LT_A . self::$LT_O . self::$LT_E/* . self::$LT_I*/ . ']?[' . self::$LT_R . '](?!о)\w* # не пускает "Педро"
-		|
-		[' . self::$LT_P . '][' . self::$LT_E . '][' . self::$LT_D . '][' . self::$LT_E . self::$LT_I . ']?[' . self::$LT_G . self::$LT_K . ']
-	) # пидарас
-|
-	\w*[' . self::$LT_Z . '][' . self::$LT_A . self::$LT_O . '][' . self::$LT_L . '][' . self::$LT_U . '][' . self::$LT_P . ']\w* # залупа
-|
-	\w*[' . self::$LT_M . '][' . self::$LT_A . '][' . self::$LT_N . '][' . self::$LT_D . '][' . self::$LT_A . self::$LT_O . ']\w* # манда
+	)[' . self::$LT_A . self::$LT_O . ']\w*', # сука
+            '\w*(?:
+		[' . self::$LT_P . '][' . self::$LT_I . self::$LT_E . '][' . self::$LT_D . '][' . self::$LT_A . self::$LT_O . self::$LT_E/* . self::$LT_I*/ . ']?[' . self::$LT_R . '](?!о)\w*' # не пускает "Педро"
+		.'|[' . self::$LT_P . '][' . self::$LT_E . '][' . self::$LT_D . '][' . self::$LT_E . self::$LT_I . ']?[' . self::$LT_G . self::$LT_K . ']
+	)', # пидарас'
+            '\w*[' . self::$LT_Z . '][' . self::$LT_A . self::$LT_O . '][' . self::$LT_L . '][' . self::$LT_U . '][' . self::$LT_P . ']\w*', # залупа
+            '	\w*[' . self::$LT_M . '][' . self::$LT_A . '][' . self::$LT_N . '][' . self::$LT_D . '][' . self::$LT_A . self::$LT_O . ']\w*', # манда
+
+        );
+
+
+        $found = array();
+        foreach ($patterns as $pattern) {
+            preg_match_all('/\b\d*('.$pattern.')\b/xu', $text, $m);
+            /*
+            preg_match_all('/
+\b\d*('.$patterns[0].'
+|'.$patterns[1].'
+|'.$patterns[2].'
+|'.$patterns[3].'
+
+|'.$patterns[4].'
+
+|'.$patterns[5].'
+
+|'.$patterns[6].'
+|'.$patterns[7].'
 )\b
 /xu', $text, $m);
+*/
 
 
-        $c = count($m[1]);
+            if (count($m[1]) > 0) {
+                echo implode(' ', $m[1]), $pattern, PHP_EOL;
+                foreach ($m[1] as $word) {
+                    $found []= $word;
+                }
+            }
+
+        }
+
+
 
         /*
         $exclusion=array('хлеба','наиболее');
         $m[1]=array_diff($m[1],$exclusion);
         */
 
-        if ($c > 0) {
-            for ($i = 0; $i < $c; $i++) {
-                $word = $m[1][$i];
+
+        if ($found) {
+            foreach ($found as $index => $word) {
                 $word = mb_strtolower($word, $utf8);
 
                 foreach (self::$exceptions as $x) {
                     if (mb_strpos($word, $x) !== false) {
                         if (is_array(self::$logEx)) {
-                            $t = &self::$logEx[$m[1][$i]];
+                            $t = &self::$logEx[$word];
                             ++$t;
                         }
                         $word = false;
-                        unset($m[1][$i]);
                         break;
                     }
                 }
 
                 if ($word) {
-                    $m[1][$i] = str_replace(array(' ', ',', ';', '.', '!', '-', '?', "\t", "\n"), '', $m[1][$i]);
+                    $found[$index] = trim($found[$index], ",;.!-?\t\n");
+                }
+                else {
+                    unset($found[$index]);
                 }
             }
 
-            $m[1] = array_unique($m[1]);
+            $found = array_unique($found);
 
-            //var_dump($m[1]);
             $asterisks = array();
-            foreach ($m[1] as $word) {
+            foreach ($found as $word) {
                 if (is_array(self::$log)) {
                     $t = &self::$log[$word];
                     ++$t;
@@ -216,7 +244,7 @@ class ObsceneCensorRus {
                 $asterisks []= str_repeat('*', mb_strlen($word, $utf8));
             }
 
-            $text = str_replace($m[1], $asterisks, $text);
+            $text = str_replace($found, $asterisks, $text);
 
             if ($charset !== $utf8) {
                 $text = iconv($utf8, $charset, $text);
