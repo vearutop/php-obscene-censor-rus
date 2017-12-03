@@ -6,6 +6,7 @@ class ObsceneCensorRus {
     public static $log;
     public static $logEx;
 
+    private static $utf8 = 'UTF-8';
     private static $LT_P = 'пПnPp';
     private static $LT_I = 'иИiI1u';
     private static $LT_E = 'еЕeE';
@@ -115,6 +116,10 @@ class ObsceneCensorRus {
         'чаепитие',
     );
 
+    public static function getObscene($text, $charset = 'UTF-8') {
+        return self::matching($text, $charset);
+    }
+
     public static function getFiltered($text, $charset = 'UTF-8') {
         self::filterText($text, $charset);
         return $text;
@@ -126,12 +131,10 @@ class ObsceneCensorRus {
         return $original === $text;
     }
 
-    public static function filterText(&$text, $charset = 'UTF-8')
+    public static function matching($text, $charset = 'UTF-8')
     {
-        $utf8 = 'UTF-8';
-
-        if ($charset !== $utf8) {
-            $text = iconv($charset, $utf8, $text);
+        if ($charset !== self::$utf8) {
+            $text = iconv($charset, self::$utf8, $text);
         }
 
         preg_match_all('/
@@ -174,60 +177,58 @@ class ObsceneCensorRus {
 |
 	\w*[' . self::$LT_M . '][' . self::$LT_A . '][' . self::$LT_N . '][' . self::$LT_D . '][' . self::$LT_A . self::$LT_O . ']\w* # манда
 )\b
-/xu', $text, $m);
+/xu', $text, $matches);
 
+        return $matches[1];
+    }
 
-        $c = count($m[1]);
+    public static function filterText(&$text, $charset = 'UTF-8')
+    {
+        $matches = self::matching($text);
 
-        /*
-        $exclusion=array('хлеба','наиболее');
-        $m[1]=array_diff($m[1],$exclusion);
-        */
-
-        if ($c > 0) {
-            for ($i = 0; $i < $c; $i++) {
-                $word = $m[1][$i];
-                $word = mb_strtolower($word, $utf8);
+        if ($matches) {
+            for ($i = 0, $l = count($matches); $i < $l; $i++) {
+                $word = $matches[$i];
+                $word = mb_strtolower($word, self::$utf8);
 
                 foreach (self::$exceptions as $x) {
                     if (mb_strpos($word, $x) !== false) {
                         if (is_array(self::$logEx)) {
-                            $t = &self::$logEx[$m[1][$i]];
+                            $t = &self::$logEx[$matches[$i]];
                             ++$t;
                         }
                         $word = false;
-                        unset($m[1][$i]);
+                        unset($matches[$i]);
                         break;
                     }
                 }
 
                 if ($word) {
-                    $m[1][$i] = str_replace(array(' ', ',', ';', '.', '!', '-', '?', "\t", "\n"), '', $m[1][$i]);
+                    $matches[$i] = str_replace(array(' ', ',', ';', '.', '!', '-', '?', "\t", "\n"), '', $matches[1][$i]);
                 }
             }
 
-            $m[1] = array_unique($m[1]);
+            $matches = array_unique($matches);
 
-            //var_dump($m[1]);
             $asterisks = array();
-            foreach ($m[1] as $word) {
+            foreach ($matches as $word) {
                 if (is_array(self::$log)) {
                     $t = &self::$log[$word];
                     ++$t;
                 }
-                $asterisks []= str_repeat('*', mb_strlen($word, $utf8));
+                $asterisks []= str_repeat('*', mb_strlen($word, self::$utf8));
             }
 
-            $text = str_replace($m[1], $asterisks, $text);
+            $text = str_replace($matches, $asterisks, $text);
 
-            if ($charset !== $utf8) {
-                $text = iconv($utf8, $charset, $text);
+            if ($charset !== self::$utf8) {
+                $text = iconv(self::$utf8, $charset, $text);
             }
 
             return true;
         } else {
-            if ($charset !== $utf8) {
-                $text = iconv($utf8, $charset, $text);
+            if ($charset !== self::$utf8) {
+                $text = iconv(self::$utf8, $charset, $text);
             }
 
             return false;
