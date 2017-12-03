@@ -110,7 +110,7 @@ class ObsceneCensorRus {
         'ебэ',
         'перв',
         'eep',
-        'dying',
+        'ying',
         'laun',
         'чаепитие',
     );
