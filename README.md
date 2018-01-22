@@ -1,6 +1,7 @@
 php-obscene-censor-rus
 ======================
 [![Build Status](https://travis-ci.org/vearutop/php-obscene-censor-rus.png?branch=master)](https://travis-ci.org/vearutop/php-obscene-censor-rus) [![Total Downloads](https://poser.pugx.org/vearutop/php-obscene-censor-rus/downloads)](https://packagist.org/packages/vearutop/php-obscene-censor-rus)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvearutop%2Fphp-obscene-censor-rus.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvearutop%2Fphp-obscene-censor-rus?ref=badge_shield)
 
 Класс для фильтрации нецензурных выражений (матов).
 
@@ -45,3 +46,7 @@ php phpunit.phar ./tests
 
 
 Цензура, антимат, матерщинные слова, фильтр мата, обсценная лексика, нецензурная брань, треугольные сиськи.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvearutop%2Fphp-obscene-censor-rus.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvearutop%2Fphp-obscene-censor-rus?ref=badge_large)
